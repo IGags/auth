@@ -1,0 +1,34 @@
+﻿@model Api.Models.RegisterRequest
+@{
+	
+}
+
+<form asp-antiforgery="true" asp-action="Register" asp-controller="Account">
+	<div asp-validation-summary="ModelOnly"></div>
+	<div>
+		<label asp-for="FIO">Введите имя</label>
+		<input asp-for="FIO" type="text">
+		<span asp-validation-for="FIO"></span>
+	</div>
+	<div>
+		<label asp-for="Phone">Введите номер телефона</label>
+		<input asp-for="Phone" type="tel">
+		<span asp-validation-for="Phone"></span>
+	</div>
+	<div>
+		<label asp-for="Email">Введите email</label>
+		<input asp-for="Email" type="text">
+		<span asp-validation-for="Email"></span>
+	</div>
+	<div>
+		<label asp-for="Password">Введите пароль</label>
+		<input asp-for="Password" type="password">
+		<span asp-validation-for="Password"></span>
+	</div>
+	<div>
+		<label asp-for="PasswordConfirm">Повторите пароль</label>
+		<input asp-for="PasswordConfirm" type="password">
+		<span asp-validation-for="PasswordConfirm"></span>
+	</div>
+	<div><input type="submit" value="Зарегистрироваться"></div>
+</form>

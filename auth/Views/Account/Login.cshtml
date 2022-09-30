@@ -1,0 +1,18 @@
+﻿@model Api.Models.AuthenticationRequest
+@{}
+<form asp-controller="Account" asp-action="Login" asp-antiforgery="true">
+	<div>
+		<label asp-for="Phone"></label>
+		<input type="text" asp-for="Phone">
+		<div asp-validation-summary="ModelOnly"></div>
+	</div>
+	<div>
+		<label asp-for="Password"></label>
+		<input type="password" asp-for="Password">
+		<span asp-validation-for="Phone"></span>
+	</div>
+	<div>
+		<input type="submit" value="Зайти">
+	</div>
+</form><br/>
+<a asp-controller="Account" asp-action="Register">Регистрация</a>
