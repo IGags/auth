@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Areas.Api.Models;
-using Api.Filters;
 using Api.Models;
 using Logic;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Api.Areas.Api.Controllers
 {
-    [Area("Api"), Route("api/account"), ApiController, ApiExceptionFilter]
+    [Area("Api"), Route("api/account"), ApiController]
     public class AccountApiController : ControllerBase
     {
         private readonly AccountManager _accountManager;
-        public AccountApiController(AccountManager accountManager, IServiceProvider provider)
+        public AccountApiController(AccountManager accountManager)
         {
             _accountManager = accountManager;
         }
@@ -24,31 +23,24 @@ namespace Api.Areas.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]RegisterRequest request)
         {
-            if (ModelState.IsValid)
-            {
-                var userDal = request.RegisterDtoToUserDal();
-                if (!await _accountManager.IsUserExistAsync(userDal))
-                {
-                    _accountManager.AddUser(userDal);
-                    return Ok();
-                }
-                return BadRequest(new ExceptionResponse { Message = "Пользователь уже существует", StatusCode = "400" });
-            }
+            if (!ModelState.IsValid) return BadRequest();
+            var userDal = request.RegisterDtoToUserDal();
+            if (await _accountManager.IsUserExistAsync(userDal))
+                return BadRequest(new ExceptionResponse
+                    { Message = "Пользователь уже существует", StatusCode = "400" });
+            _accountManager.AddUser(userDal);
+            return Ok();
 
-            return BadRequest();
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> LogIn([FromBody]LoginRequest request)
         {
-            if (ModelState.IsValid)
-            {
-                var userDal = request.AuthDtoToUserDal();
-                if (await _accountManager.LogInUserAsync(userDal)) return Ok();
-                return BadRequest(new ExceptionResponse{Message = "Неверные данные авторизации", StatusCode = "400"});
-            }
+            if (!ModelState.IsValid) return BadRequest();
+            var userDal = request.AuthDtoToUserDal();
+            if (await _accountManager.LogInUserAsync(userDal)) return Ok();
+            return BadRequest(new ExceptionResponse{Message = "Неверные данные авторизации", StatusCode = "400"});
 
-            return BadRequest();
         }
 
         [HttpPost("logout"), Authorize]

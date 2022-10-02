@@ -29,7 +29,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("register"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([FromBody]RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("login"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([FromBody]LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +68,7 @@ namespace Api.Controllers
                     return RedirectToAction("GetInfo", "Cabinet");
                 }
             }
+
             ModelState.AddModelError(String.Empty, "Ошибка авторизации");
             return View(request);
         }

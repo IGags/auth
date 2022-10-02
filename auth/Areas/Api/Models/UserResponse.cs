@@ -2,7 +2,6 @@
 
 namespace Api.Areas.Api.Models
 {
-    [Serializable]
     public class UserResponse
     {
         public string FIO { get; set; }
