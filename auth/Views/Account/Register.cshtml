@@ -1,6 +1,6 @@
 ﻿@model Api.Models.RegisterRequest
 @{
-	
+
 }
 
 <form asp-antiforgery="true" asp-action="Register" asp-controller="Account">
@@ -30,5 +30,7 @@
 		<input asp-for="PasswordConfirm" type="password">
 		<span asp-validation-for="PasswordConfirm"></span>
 	</div>
-	<div><input type="submit" value="Зарегистрироваться"></div>
+	<div>
+		<input type="submit" value="Зарегистрироваться">
+	</div>
 </form>

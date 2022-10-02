@@ -1,78 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Api.Models;
-using DAL.Models;
 using Logic;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Api.Controllers
+namespace Api.Controllers;
+
+[Route("account")]
+public class AccountController : Controller
 {
-    [Route("account")]
-    public class AccountController : Controller
+    private readonly AccountManager _accountManager;
+
+    public AccountController(AccountManager manager)
     {
-        private readonly AccountManager _accountManager;
-        public AccountController(AccountManager manager)
-        {
-            _accountManager = manager;
-        }
+        _accountManager = manager;
+    }
 
-        [HttpGet("register")]
-        public IActionResult Register()
-        {
-            return View();
-        }
+    [HttpGet("register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
 
-        [HttpPost("register"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterRequest request)
+    [HttpPost("register")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterRequest request)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            var userDal = request.RegisterDtoToUserDal();
+            if (!await _accountManager.IsUserExistAsync(userDal))
             {
-                var userDal = request.RegisterDtoToUserDal();
-                if (!await _accountManager.IsUserExistAsync(userDal))
-                {
-                    _accountManager.AddUser(userDal);
-                    return RedirectToAction("RegisterSuccess", "Account", new{ userDal.FIO });
-                }
-                ModelState.AddModelError(String.Empty, $"Account with {userDal.Email} or {userDal.Phone} has already exists");
+                _accountManager.AddUser(userDal);
+                return RedirectToAction("RegisterSuccess", "Account", new { userDal.FIO });
             }
 
-            return View(request);
+            ModelState.AddModelError(string.Empty,
+                $"Account with {userDal.Email} or {userDal.Phone} has already exists");
         }
 
-        [HttpGet("register-success")]
-        public IActionResult RegisterSuccess(string fio)
-        {
-            ViewBag.FIO = fio;
-            return View();
-        }
+        return View(request);
+    }
 
-        [HttpGet("login")]
-        public IActionResult Login()
-        {
-            return View();
-        }
+    [HttpGet("register-success")]
+    public IActionResult RegisterSuccess(string fio)
+    {
+        ViewBag.FIO = fio;
+        return View();
+    }
 
-        [HttpPost("login"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginRequest request)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _accountManager.LogInUserAsync(request.AuthDtoToUserDal()))
-                {
-                    return RedirectToAction("GetInfo", "Cabinet");
-                }
-            }
+    [HttpGet("login")]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-            ModelState.AddModelError(String.Empty, "Ошибка авторизации");
-            return View(request);
-        }
+    [HttpPost("login")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        if (ModelState.IsValid)
+            if (await _accountManager.LogInUserAsync(request.AuthDtoToUserDal()))
+                return RedirectToAction("GetInfo", "Cabinet");
 
-
+        ModelState.AddModelError(string.Empty, "Ошибка авторизации");
+        return View(request);
     }
 }

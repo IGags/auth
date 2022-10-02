@@ -1,39 +1,25 @@
-html {
-  font-size: 14px;
-}
+html { font-size: 14px; }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html { font-size: 16px; }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    min-height: 100%;
+    position: relative;
 }
 
-body {
-  margin-bottom: 60px;
-}
+body { margin-bottom: 60px; }
 
-.field-validation-error {
-    color: #f00;
-}
+.field-validation-error { color: #f00; }
 
-.field-validation-valid {
-    display: none;
-}
+.field-validation-valid { display: none; }
 
-.input-validation-error {
-    border: 1px solid #f00;
-}
+.input-validation-error { border: 1px solid #f00; }
 
 .validation-summary-errors {
-    font-weight: bold;
     color: #f00;
+    font-weight: bold;
 }
 
-.validation-summary-valid {
-    display: none;
-}
+.validation-summary-valid { display: none; }

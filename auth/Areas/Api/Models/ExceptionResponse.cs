@@ -1,8 +1,7 @@
-﻿namespace Api.Areas.Api.Models
+﻿namespace Api.Areas.Api.Models;
+
+public class ExceptionResponse
 {
-    public class ExceptionResponse
-    {
-        public string StatusCode { get; set; }
-        public string Message { get; set; }
-    }
+    public string StatusCode { get; set; }
+    public string Message { get; set; }
 }
