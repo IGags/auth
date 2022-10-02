@@ -52,7 +52,7 @@ namespace Logic
         {
             var claims = new List<Claim>
             {
-                new (ClaimsIdentity.DefaultNameClaimType, user.Phone),
+                new ("Phone", user.Phone),
                 new ("FIO", user.FIO),
                 new ("Email", user.Email),
                 new ("LastLogin", user.LastLogin.ToString())

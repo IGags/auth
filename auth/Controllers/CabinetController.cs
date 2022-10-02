@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Authorize]
+    [Authorize, Controller]
     public class CabinetController : Controller
     {
         private readonly AccountManager _accountManager;
@@ -14,13 +14,13 @@ namespace Api.Controllers
             _accountManager = manager;
         }
 
-		[Route("cabinet")]
+		[HttpGet("cabinet")]
 		public IActionResult GetInfo()
 		{
             return View(User.Claims);
         }
 
-        [Route("[action]")]
+        [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
             await _accountManager.LogoutAsync();

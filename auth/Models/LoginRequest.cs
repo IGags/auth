@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public class AuthenticationRequest
+    public class LoginRequest
     {
         [Required, RegularExpression("^[7]{1}\\d{10}$")]
         public string Phone { get; set; }

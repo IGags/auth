@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("account")]
     public class AccountController : Controller
     {
         private readonly AccountManager _accountManager;
@@ -21,14 +22,14 @@ namespace Api.Controllers
             _accountManager = manager;
         }
 
-        [HttpGet, Route("[action]")]
+        [HttpGet("register")]
         public IActionResult Register()
         {
             return View();
         }
 
-        [HttpPost, Route("[action]"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        [HttpPost("register"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([FromBody]RegisterRequest request)
         {
             if (ModelState.IsValid)
             {
@@ -44,21 +45,21 @@ namespace Api.Controllers
             return View(request);
         }
 
-        [Route("[action]")]
+        [HttpGet("register-success")]
         public IActionResult RegisterSuccess(string fio)
         {
             ViewBag.FIO = fio;
             return View();
         }
 
-        [Route("[action]"), HttpGet]
+        [HttpGet("login")]
         public IActionResult Login()
         {
             return View();
         }
 
-        [Route("[action]"), HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(AuthenticationRequest request)
+        [HttpPost("login"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([FromBody]LoginRequest request)
         {
             if (ModelState.IsValid)
             {
